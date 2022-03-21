@@ -106,19 +106,13 @@ app.post('/api/add/data/card', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, 'secret')
-        const ownerId = decoded.id
-        const name = req.body.name
-        const number = req.body.number
-        const date = req.body.date
-        const ccv = req.body.ccv
-        const folder = req.body.folder
         const card = await Card.create({
-            name: name,
-            number: number,
-            date: date,
-            ccv: ccv,
-            owner: ownerId,
-            folder: folder
+            name: req.body.name,
+            number: req.body.number,
+            date: req.body.date,
+            ccv: req.body.ccv,
+            owner: decoded.id,
+            folder: req.body.folder
         })
         res.json({ status: 'ok' })
     } catch (error) {
@@ -127,12 +121,81 @@ app.post('/api/add/data/card', async (req, res) => {
 })
 
 app.post('/api/add/data/pass', async (req, res) => {
+    const token = req.headers['x-access-token']
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const pass = await Pass.create({
+            name: req.body.name,
+            url: req.body.url,
+            user: req.body.user,
+            pass: req.body.user,
+            owner: decoded.id,
+            folder: req.body.folder
+        })
 
+        res.json({status : 'ok'})
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
 })
+
+
+app.post('/api/get/data/cards', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const cards = await Card.find( { owner: decoded.id, folder: req.body.folder } )
+        res.json(cards)
+    } catch (error) {
+        res.json({ status: 'error', error: error })
+    }
+})
+
+app.post('/api/get/data/pass', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const pass = await Pass.find( { owner: decoded.id, folder: req.body.folder} )
+        res.json(pass)
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
+})
+
+app.post('/api/get/data/notes', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const note = await Note.find( { owner: decoded.id, folder: req.body.folder} )
+        res.json(note)
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
+})
+
 
 app.post('/api/add/data/note', async (req, res) => {
+    const token = req.headers['x-access-token']
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const note = await Note.create({
+            name: req.body.name,
+            title: req.body.title,
+            note: req.body.note,
+            owner: decoded.id,
+            folder: req.body.folder
+        })
 
+        res.json({status : 'ok'})
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
 })
+
+
 
 
 

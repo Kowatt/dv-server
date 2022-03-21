@@ -4,7 +4,8 @@ const Note = new mongoose.Schema({
         name: { type: String, required: true },
         title: { type: String, required: true },
         note: { type: String, required: true },
-        owner: { type: String, required: true}
+        owner: { type: String, required: true},
+        folder: { type: String, required: true }
     },
 { collection: 'note-data'})
 
