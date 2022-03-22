@@ -8,6 +8,10 @@ const Card = require("./models/card.model")
 const Pass = require("./models/pass.model")
 const Note = require("./models/note.model")
 const jwt = require("jsonwebtoken")
+const { v4: uuidv4 } = require('uuid')
+const bcrypt = require('bcrypt')
+
+const saltRounds = 10
 
 
 app.use(cors())
@@ -24,9 +28,11 @@ app.post('/api/register', async (req, res) => {
             return
         }
 
-        const user = await User.create({
-            username: req.body.username,
-            password: req.body.password
+        bcrypt.hash(req.body.password, saltRounds, async function(err, res) {
+            const user = await User.create({
+                username: req.body.username,
+                password: res
+            })
         })
         res.json( { status: 'ok' })
     } catch (err) {
@@ -37,11 +43,14 @@ app.post('/api/register', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
     const user = await User.findOne({
-        username: req.body.username,
-        password: req.body.password
+        username: req.body.username
     })
 
     if (user) {
+
+        const match = await bcrypt.compare(req.body.password, user.password)
+
+        if (!match) return res.json({ status: 'error', user: false })
 
         const token = jwt.sign({
             username: user.username,
@@ -52,6 +61,7 @@ app.post('/api/login', async (req, res) => {
     } else {
         return res.json({ status: 'error', user: false })
     }
+
 })
 
 app.post('/api/add/folder', async (req, res) => {
