@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 const Card = new mongoose.Schema({
-        name: { type: String, required: true },
-        number: { type: String, required: true },
-        date: { type: String, required: true },
-        ccv: { type: String, required: true },
+        name: { type: Object, required: true },
+        number: { type: Object, required: true },
+        date: { type: Object, required: true },
+        ccv: { type: Object, required: true },
         owner: { type: String, required: true},
         folder: { type: String, required: true }
     },

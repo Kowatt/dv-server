@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const Folder = new mongoose.Schema({
-        name: { type: String, required: true },
+        name: { type: Object, required: true },
         owner: { type: String, required: true},
     },
 { collection: 'folder-data'})

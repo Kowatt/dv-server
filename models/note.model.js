@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
 const Note = new mongoose.Schema({
-        name: { type: String, required: true },
-        title: { type: String, required: true },
-        note: { type: String, required: true },
+        name: { type: Object, required: true },
+        title: { type: Object, required: true },
+        note: { type: Object, required: true },
         owner: { type: String, required: true},
         folder: { type: String, required: true }
     },

@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 const Pass = new mongoose.Schema({
-        name: { type: String, required: true },
-        url: { type: String, required: true },
-        user: { type: String, required: true },
-        pass: { type: String, required: true },
+        name: { type: Object, required: true },
+        url: { type: Object, required: true },
+        user: { type: Object, required: true },
+        pass: { type: Object, required: true },
         owner: { type: String, required: true},
         folder: { type: String, required: true }
     },
