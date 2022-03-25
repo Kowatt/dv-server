@@ -168,7 +168,7 @@ app.post('/api/add/data/pass', async (req, res) => {
             name: crypto.encrypt(req.body.name, uuid),
             url:  crypto.encrypt(req.body.url, uuid),
             user: crypto.encrypt(req.body.user, uuid),
-            pass:  crypto.encrypt(req.body.user, uuid),
+            pass:  crypto.encrypt(req.body.pass, uuid),
             owner: decoded.id,
             folder: req.body.folder
         })
