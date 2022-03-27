@@ -180,8 +180,6 @@ app.post('/api/add/data/pass', async (req, res) => {
 })
 
 
-
-
 app.post('/api/get/data/pass', async (req, res) => {
     const token = req.headers['x-access-token']
 
@@ -238,6 +236,58 @@ app.post('/api/get/data/notes', async (req, res) => {
     }
 })
 
+app.post('/api/edit/data/card', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const uuid = decoded.uuid
+        const card = await Card.findOneAndUpdate({_id : req.body.id}, {
+            name: crypto.encrypt(req.body.name, uuid),
+            number: crypto.encrypt(req.body.number, uuid),
+            date: crypto.encrypt(req.body.date, uuid),
+            ccv: crypto.encrypt(req.body.ccv, uuid)
+        })
+        res.json({status: 'ok'})
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
+})
+
+app.post('/api/edit/data/pass', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const uuid = decoded.uuid
+        const card = await Pass.findOneAndUpdate({_id : req.body.id}, {
+            name: crypto.encrypt(req.body.name, uuid),
+            url: crypto.encrypt(req.body.url, uuid),
+            user: crypto.encrypt(req.body.user, uuid),
+            pass: crypto.encrypt(req.body.pass, uuid)
+        })
+        res.json({status: 'ok'})
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
+})
+
+app.post('/api/edit/data/note', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret')
+        const uuid = decoded.uuid
+        const card = await Note.findOneAndUpdate({_id : req.body.id}, {
+            name: crypto.encrypt(req.body.name, uuid),
+            title: crypto.encrypt(req.body.title, uuid),
+            note: crypto.encrypt(req.body.note, uuid),
+        })
+        res.json({status: 'ok'})
+    } catch (error) {
+        res.json({status: 'error', error: error})
+    }
+})
 
 app.listen(4000, () => {
     console.log("Server start on port 4000")
