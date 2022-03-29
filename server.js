@@ -98,6 +98,39 @@ app.post('/api/remove/folder', async (req, res) => {
     }
 })
 
+app.post('/api/remove/data/card', async (req, res) => {
+    const cardId = req.body.cardId
+
+    try {
+        const card = await Card.findByIdAndRemove(cardId)
+        res.json({ status: 'ok' })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/api/remove/data/pass', async (req, res) => {
+    const passId = req.body.passId
+
+    try {
+        const pass = await Pass.findByIdAndRemove(passId)
+        res.json({ status: 'ok' })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/api/remove/data/note', async (req, res) => {
+    const noteId = req.body.noteId
+
+    try {
+        const note = await Note.findByIdAndRemove(noteId)
+        res.json({ status: 'ok' })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 app.post('/api/get/folders', async (req, res) => {
 
     const token = req.headers['x-access-token']
