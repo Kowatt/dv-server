@@ -13,7 +13,7 @@ const bcrypt = require('bcrypt')
 const crypto = require("./crypto/crypto")
 
 const saltRounds = 10
-
+const key = "apvnjapciajjhl986556"
 
 app.use(cors())
 app.use(express.json())
@@ -59,7 +59,7 @@ app.post('/api/login', async (req, res) => {
             username: user.username,
             id: user._id,
             uuid: crypto.decrypt(user.uuid, req.body.password)
-        }, 'secret')
+        }, key)
 
         return res.json({ status: 'ok', user: token })
     } else {
@@ -72,7 +72,7 @@ app.post('/api/add/folder', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const ownerId = decoded.id
         const uuid = decoded.uuid
         const folder = await Folder.create({
@@ -136,7 +136,7 @@ app.post('/api/get/folders', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const ownerId = decoded.id
         const uuid = decoded.uuid
 
@@ -157,7 +157,7 @@ app.post('/api/add/data/card', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const card = await Card.create({
             name: crypto.encrypt(req.body.name, uuid),
@@ -177,7 +177,7 @@ app.post('/api/get/data/cards', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const cards = await Card.find( { owner: decoded.id, folder: req.body.folder } )
         for (let card of cards) {
@@ -195,7 +195,7 @@ app.post('/api/get/data/cards', async (req, res) => {
 app.post('/api/add/data/pass', async (req, res) => {
     const token = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const pass = await Pass.create({
             name: crypto.encrypt(req.body.name, uuid),
@@ -217,7 +217,7 @@ app.post('/api/get/data/pass', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const pass = await Pass.find( { owner: decoded.id, folder: req.body.folder } )
         for (let pas of pass) {
@@ -235,7 +235,7 @@ app.post('/api/get/data/pass', async (req, res) => {
 app.post('/api/add/data/note', async (req, res) => {
     const token = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const note = await Note.create({
             name: crypto.encrypt(req.body.name, uuid),
@@ -255,7 +255,7 @@ app.post('/api/get/data/notes', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const note = await Note.find( { owner: decoded.id, folder: req.body.folder} )
         for (let not of note) {
@@ -273,7 +273,7 @@ app.post('/api/edit/data/card', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const card = await Card.findOneAndUpdate({_id : req.body.id}, {
             name: crypto.encrypt(req.body.name, uuid),
@@ -291,7 +291,7 @@ app.post('/api/edit/data/pass', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const card = await Pass.findOneAndUpdate({_id : req.body.id}, {
             name: crypto.encrypt(req.body.name, uuid),
@@ -309,7 +309,7 @@ app.post('/api/edit/data/note', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret')
+        const decoded = jwt.verify(token, key)
         const uuid = decoded.uuid
         const card = await Note.findOneAndUpdate({_id : req.body.id}, {
             name: crypto.encrypt(req.body.name, uuid),
